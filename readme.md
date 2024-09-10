@@ -1,3 +1,7 @@
+# y-spreadsheet
+
+从 [x-spreadsheet](https://github.com/myliang/x-spreadsheet) fork 的项目，修复了部分bug，并添加了部分配置项。
+
 # x-spreadsheet
 
 [![npm package](https://img.shields.io/npm/v/x-data-spreadsheet.svg)](https://www.npmjs.org/package/x-data-spreadsheet)
@@ -27,7 +31,7 @@
 <script src="https://unpkg.com/x-data-spreadsheet@1.1.5/dist/xspreadsheet.js"></script>
 
 <script>
-   x_spreadsheet('#xspreadsheet');
+   y_spreadsheet('#xspreadsheet');
 </script>
 ```
 

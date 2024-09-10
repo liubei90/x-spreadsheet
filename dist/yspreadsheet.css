@@ -411,7 +411,7 @@ body {
 .x-spreadsheet-toolbar,
 .x-spreadsheet-bottombar {
   height: 40px;
-  padding: 0 30px;
+  padding: 0 0;
   text-align: left;
   background: #f5f6f7;
   display: flex;
@@ -1037,4 +1037,4 @@ form fieldset select {
 }
 
 
-/*# sourceMappingURL=xspreadsheet.css.map*/
+/*# sourceMappingURL=yspreadsheet.css.map*/

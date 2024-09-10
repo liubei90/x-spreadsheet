@@ -39,8 +39,8 @@ function translate(key, messages) {
 
 function t(key) {
   let v = translate(key, $messages);
-  if (!v && window && window.x_spreadsheet && window.x_spreadsheet.$messages) {
-    v = translate(key, window.x_spreadsheet.$messages);
+  if (!v && window && window.y_spreadsheet && window.y_spreadsheet.$messages) {
+    v = translate(key, window.y_spreadsheet.$messages);
   }
   return v || '';
 }

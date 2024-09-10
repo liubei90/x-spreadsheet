@@ -41,6 +41,10 @@ declare module 'x-data-spreadsheet' {
     };
     /** 是否展示行号文本 */
     showColIndexText?: boolean;
+    /** 右键菜单展示内容，可以传入自定义菜单 */
+    contentMenus?: ('' | '2')[];
+    /** 自定义菜单点击事件，type 为传入的自定义菜单 */
+    onCustomerMenuClick?: (type: string, data: Record<string, any>, sheet: Sheet) => void;
     style?: {
       bgcolor: string;
       align: 'left' | 'center' | 'right';
@@ -213,7 +217,7 @@ declare module 'x-data-spreadsheet' {
   }
   global {
     interface Window {
-      x_spreadsheet(container: string | HTMLElement, opts?: Options): Spreadsheet; 
+      y_spreadsheet(container: string | HTMLElement, opts?: Options): Spreadsheet; 
     }
   }
 }
