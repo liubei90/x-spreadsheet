@@ -213,7 +213,9 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
       if (sri <= ii && ii < eri + 1) {
         renderSelectedHeaderCell.call(this, 0, y, w, rowHeight);
       }
-      draw.fillText(ii + 1, w / 2, y + (rowHeight / 2));
+      if (w && data.settings && data.settings.showColIndexText !== false) {
+        draw.fillText(ii + 1, w / 2, y + (rowHeight / 2));
+      }
       if (i > 0 && data.rows.isHide(i - 1)) {
         draw.save();
         draw.attr({ strokeStyle: '#c6c6c6' });
@@ -233,7 +235,9 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
       if (sci <= ii && ii < eci + 1) {
         renderSelectedHeaderCell.call(this, x, 0, colWidth, h);
       }
-      draw.fillText(stringAt(ii), x + (colWidth / 2), h / 2);
+      if (h && data.settings && data.settings.showRowIndexText !== false) {
+        draw.fillText(stringAt(ii), x + (colWidth / 2), h / 2);
+      }
       if (i > 0 && data.cols.isHide(i - 1)) {
         draw.save();
         draw.attr({ strokeStyle: '#c6c6c6' });
@@ -318,7 +322,7 @@ class Table {
     // fixed width of header
     const fw = cols.indexWidth;
     // fixed height of header
-    const fh = rows.height;
+    const fh = rows.indexHeight;
 
     this.draw.resize(data.viewWidth(), data.viewHeight());
     this.clear();

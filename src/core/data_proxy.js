@@ -71,6 +71,7 @@ import { t } from '../locale/locale';
 const defaultSettings = {
   mode: 'edit', // edit | read
   view: {
+    fit: '', // 'content'
     height: () => document.documentElement.clientHeight,
     width: () => document.documentElement.clientWidth,
   },
@@ -78,16 +79,20 @@ const defaultSettings = {
   showToolbar: true,
   showContextmenu: true,
   showBottomBar: true,
+  showScrollbar: true,
   row: {
     len: 100,
     height: 25,
+    indexHeight: 25,
   },
+  showRowIndexText: true,
   col: {
     len: 26,
     width: 100,
     indexWidth: 60,
     minWidth: 60,
   },
+  showColIndexText: true,
   style: {
     bgcolor: '#ffffff',
     align: 'left',
@@ -277,15 +282,15 @@ function getCellRowByY(y, scrollOffsety) {
   const { rows } = this;
   const fsh = this.freezeTotalHeight();
   // console.log('y:', y, ', fsh:', fsh);
-  let inits = rows.height;
-  if (fsh + rows.height < y) inits -= scrollOffsety;
+  let inits = rows.indexHeight;
+  if (fsh + rows.indexHeight < y) inits -= scrollOffsety;
 
   // handle ri in autofilter
   const frset = this.exceptRowSet;
 
   let ri = 0;
   let top = inits;
-  let { height } = rows;
+  let height = rows.indexHeight;
   for (; ri < rows.len; ri += 1) {
     if (top > y) break;
     if (!frset.has(ri)) {
@@ -297,9 +302,10 @@ function getCellRowByY(y, scrollOffsety) {
   // console.log('ri:', ri, ', top:', top, ', height:', height);
 
   if (top <= 0) {
-    return { ri: -1, top: 0, height };
+    console.log('getCellRowByY', { ri: -1, top: 0, height: rows.indexHeight });
+    return { ri: -1, top: 0, height: rows.indexHeight };
   }
-
+  console.log('getCellRowByY', { ri: ri - 1, top, height });
   return { ri: ri - 1, top, height };
 }
 
@@ -325,6 +331,7 @@ function getCellColByX(x, scrollOffsetx) {
 export default class DataProxy {
   constructor(name, settings) {
     this.settings = helper.merge(defaultSettings, settings || {});
+    console.log('DataProxy', name, settings, this.settings);
     // save data begin
     this.name = name || 'sheet';
     this.freeze = [0, 0];
@@ -596,6 +603,7 @@ export default class DataProxy {
           cell.text = `=${value}()`;
         }
       } else {
+        console.log('setSelectedCellAttr', property, value, JSON.stringify(selector.range), styles, rows);
         selector.range.each((ri, ci) => {
           const cell = rows.getCellOrNew(ri, ci);
           let cstyle = {};
@@ -659,12 +667,22 @@ export default class DataProxy {
     return this.rows.getCell(nri, ci);
   }
 
+  getSelectedCellIndex() {
+    const { ri, ci } = this.selector;
+    let nri = ri;
+    if (this.unsortedRowMap.has(ri)) {
+      nri = this.unsortedRowMap.get(ri);
+    }
+
+    return { ri: nri, ci };
+  }
+
   xyInSelectedRect(x, y) {
     const {
       left, top, width, height,
     } = this.getSelectedRect();
     const x1 = x - this.cols.indexWidth;
-    const y1 = y - this.rows.height;
+    const y1 = y - this.rows.indexHeight;
     // console.log('x:', x, ',y:', y, 'left:', left, 'top:', top);
     return x1 > left && x1 < (left + width)
       && y1 > top && y1 < (top + height);
@@ -711,6 +729,16 @@ export default class DataProxy {
     if (fsh > 0 && fsh > top) {
       top0 = top;
     }
+    console.log('getRect', {
+      l: left,
+      t: top,
+      left: left0,
+      top: top0,
+      height,
+      width,
+      scroll,
+    });
+
     return {
       l: left,
       t: top,
@@ -1066,6 +1094,11 @@ export default class DataProxy {
   }
 
   viewHeight() {
+    if (this.settings.view.fit === 'content') {
+      const rowsH = this.rows.totalHeight();
+      console.log('viewHeight', rowsH);
+      return rowsH;
+    }
     const { view, showToolbar, showBottomBar } = this.settings;
     let h = view.height();
     if (showBottomBar) {
@@ -1078,6 +1111,11 @@ export default class DataProxy {
   }
 
   viewWidth() {
+    if (this.settings.view.fit === 'content') {
+      const colsW = this.cols.totalWidth();
+      console.log('viewWidth', colsW);
+      return colsW;
+    }
     return this.settings.view.width();
   }
 

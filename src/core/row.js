@@ -2,11 +2,12 @@ import helper from './helper';
 import { expr2expr } from './alphabet';
 
 class Rows {
-  constructor({ len, height }) {
+  constructor({ len, height, indexHeight }) {
     this._ = {};
     this.len = len;
     // default row height
     this.height = height;
+    this.indexHeight = indexHeight;
   }
 
   getHeight(ri) {

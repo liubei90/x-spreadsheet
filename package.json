@@ -1,5 +1,5 @@
 {
-  "name": "x-data-spreadsheet",
+  "name": "y-data-spreadsheet",
   "version": "1.1.8",
   "description": "a javascript xpreadsheet",
   "types": "src/index.d.ts",
@@ -9,11 +9,11 @@
     "dist",
     "src"
   ],
-  "author": "myliang <liangyuliang0335@gmail.com>",
+  "author": "liubei <1021086660@qq.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/myliang/x-spreadsheet.git"
+    "url": "https://github.com/liubei90/x-spreadsheet.git"
   },
   "nyc": {
     "all": true,
@@ -30,9 +30,7 @@
     "build": "webpack --config build/webpack.prod.js",
     "build-locale": "webpack --config build/webpack.locale.js",
     "lint": "./node_modules/eslint/bin/eslint.js src",
-    "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register --recursive test",
-    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov -t 31ecdb12-8ecb-46f7-a486-65c2516307dd",
-    "postinstall": "opencollective-postinstall"
+    "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register --recursive test"
   },
   "keywords": [
     "javascript",
@@ -49,8 +47,8 @@
     "codecov": "^3.3.0",
     "css-loader": "^1.0.0",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "less": "^3.8.1",
@@ -64,12 +62,5 @@
     "webpack-dev-server": "^3.10.2",
     "webpack-merge": "^4.1.4"
   },
-  "dependencies": {
-    "opencollective": "^1.0.3",
-    "opencollective-postinstall": "^2.0.2"
-  },
-  "collective": {
-    "type": "opencollective",
-    "url": "https://opencollective.com/x-spreadsheet"
-  }
+  "dependencies": {}
 }

@@ -11,13 +11,13 @@ class Element {
     this.data = {};
   }
 
-  data(key, value) {
-    if (value !== undefined) {
-      this.data[key] = value;
-      return this;
-    }
-    return this.data[key];
-  }
+  // data(key, value) {
+  //   if (value !== undefined) {
+  //     this.data[key] = value;
+  //     return this;
+  //   }
+  //   return this.data[key];
+  // }
 
   on(eventNames, handler) {
     const [fen, ...oen] = eventNames.split('.');

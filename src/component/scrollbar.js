@@ -2,7 +2,8 @@ import { h } from './element';
 import { cssPrefix } from '../config';
 
 export default class Scrollbar {
-  constructor(vertical) {
+  constructor(vertical, hiden) {
+    this.hiden = hiden;
     this.vertical = vertical;
     this.moveFn = null;
     this.el = h('div', `${cssPrefix}-scrollbar ${vertical ? 'vertical' : 'horizontal'}`)
@@ -16,6 +17,10 @@ export default class Scrollbar {
         }
         // console.log('evt:::', evt);
       });
+
+    if (this.hiden) {
+      this.el.hide();
+    }
   }
 
   move(v) {
@@ -28,6 +33,9 @@ export default class Scrollbar {
   }
 
   set(distance, contentDistance) {
+    if (this.hiden) {
+      return this;
+    }
     const d = distance - 1;
     // console.log('distance:', distance, ', contentDistance:', contentDistance);
     if (contentDistance > d) {

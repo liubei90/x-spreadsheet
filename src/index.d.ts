@@ -11,25 +11,36 @@ declare module 'x-data-spreadsheet' {
     showGrid?: boolean;
     showContextmenu?: boolean;
     showBottomBar?: boolean;
+    /** 是否展示滚动条 */
+    showScrollbar?: boolean;
     extendToolbar?: {
       left?: ExtendToolbarOption[],
       right?: ExtendToolbarOption[],
     };
     autoFocus?: boolean;
     view?: {
+      /** 视口自动适配内容 */
+      fit?: 'content';
       height: () => number;
       width: () => number;
     };
     row?: {
       len: number;
       height: number;
+      /** 列号行的高度，为 0 时不展示文本 */
+      indexHeight: number;
     };
+    /** 是否展示列号文本 */
+    showRowIndexText?: boolean;
     col?: {
       len: number;
       width: number;
+      /** 行号列的宽度，为 0 时不展示文本 */
       indexWidth: number;
       minWidth: number;
     };
+    /** 是否展示行号文本 */
+    showColIndexText?: boolean;
     style?: {
       bgcolor: string;
       align: 'left' | 'center' | 'right';

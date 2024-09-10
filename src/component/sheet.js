@@ -136,7 +136,7 @@ function overlayerMousemove(evt) {
     rowResizer, colResizer, tableEl, data,
   } = this;
   const { rows, cols } = data;
-  if (offsetX > cols.indexWidth && offsetY > rows.height) {
+  if (offsetX > cols.indexWidth && offsetY > rows.indexHeight) {
     rowResizer.hide();
     colResizer.hide();
     return;
@@ -157,7 +157,9 @@ function overlayerMousemove(evt) {
     rowResizer.hide();
   }
   if (cRect.ri === -1 && cRect.ci >= 0) {
-    cRect.height = rows.height;
+    console.log('overlayerMousemove cRect', cRect);
+
+    cRect.height = rows.indexHeight;
     colResizer.show(cRect, {
       height: tRect.height,
     });
@@ -202,14 +204,14 @@ function overlayerMousescroll(evt) {
       // up
       const ri = data.scroll.ri + 1;
       if (ri < rows.len) {
-        const rh = loopValue(ri, i => rows.getHeight(i));
+        const rh = loopValue(ri, (i) => rows.getHeight(i));
         verticalScrollbar.move({ top: top + rh - 1 });
       }
     } else {
       // down
       const ri = data.scroll.ri - 1;
       if (ri >= 0) {
-        const rh = loopValue(ri, i => rows.getHeight(i));
+        const rh = loopValue(ri, (i) => rows.getHeight(i));
         verticalScrollbar.move({ top: ri === 0 ? 0 : top - rh });
       }
     }
@@ -221,14 +223,14 @@ function overlayerMousescroll(evt) {
       // left
       const ci = data.scroll.ci + 1;
       if (ci < cols.len) {
-        const cw = loopValue(ci, i => cols.getWidth(i));
+        const cw = loopValue(ci, (i) => cols.getWidth(i));
         horizontalScrollbar.move({ left: left + cw - 1 });
       }
     } else {
       // right
       const ci = data.scroll.ci - 1;
       if (ci >= 0) {
-        const cw = loopValue(ci, i => cols.getWidth(i));
+        const cw = loopValue(ci, (i) => cols.getWidth(i));
         horizontalScrollbar.move({ left: ci === 0 ? 0 : left - cw });
       }
     }
@@ -296,6 +298,7 @@ function sheetReset() {
   } = this;
   const tOffset = this.getTableOffset();
   const vRect = this.getRect();
+  console.log('sheetReset', tOffset, vRect);
   tableEl.attr(vRect);
   overlayerEl.offset(vRect);
   overlayerCEl.offset(tOffset);
@@ -340,7 +343,7 @@ function paste(what, evt) {
     // pastFromSystemClipboard is async operation, need to tell it how to reset sheet and trigger event after it finishes
     // pasting content from system clipboard
     data.pasteFromSystemClipboard(resetSheet, eventTrigger);
-  } else if (data.paste(what, msg => xtoast('Tip', msg))) {
+  } else if (data.paste(what, (msg) => xtoast('Tip', msg))) {
     sheetReset.call(this);
   } else if (evt) {
     const cdata = evt.clipboardData.getData('text/plain');
@@ -419,7 +422,7 @@ function overlayerMousedown(evt) {
       }
     }, () => {
       if (isAutofillEl && selector.arange && data.settings.mode !== 'read') {
-        if (data.autofill(selector.arange, 'all', msg => xtoast('Tip', msg))) {
+        if (data.autofill(selector.arange, 'all', (msg) => xtoast('Tip', msg))) {
           table.render();
         }
       }
@@ -694,7 +697,13 @@ function sheetInitEvents() {
     }
   };
   // contextmenu
-  contextMenu.itemClick = (type) => {
+  contextMenu.itemClick = (type, customerKey) => {
+    if (customerKey) {
+      if (this.data.settings && typeof this.data.settings.onCustomerMenuClick === 'function') {
+        this.data.settings.onCustomerMenuClick.call(null, type, this.data.getData(), this.data);
+      }
+      return;
+    }
     // console.log('type:', type);
     if (type === 'validation') {
       modalValidation.setValue(this.data.getSelectedValidation());
@@ -888,7 +897,9 @@ function sheetInitEvents() {
 export default class Sheet {
   constructor(targetEl, data) {
     this.eventMap = createEventEmitter();
-    const { view, showToolbar, showContextmenu } = data.settings;
+    const {
+      view, showToolbar, showContextmenu, contentMenus, showScrollbar,
+    } = data.settings;
     this.el = h('div', `${cssPrefix}-sheet`);
     this.toolbar = new Toolbar(data, view.width, !showToolbar);
     this.print = new Print(data);
@@ -900,8 +911,8 @@ export default class Sheet {
     this.rowResizer = new Resizer(false, data.rows.height);
     this.colResizer = new Resizer(true, data.cols.minWidth);
     // scrollbar
-    this.verticalScrollbar = new Scrollbar(true);
-    this.horizontalScrollbar = new Scrollbar(false);
+    this.verticalScrollbar = new Scrollbar(true, !showScrollbar);
+    this.horizontalScrollbar = new Scrollbar(false, !showScrollbar);
     // editor
     this.editor = new Editor(
       formulas,
@@ -911,7 +922,7 @@ export default class Sheet {
     // data validation
     this.modalValidation = new ModalValidation();
     // contextMenu
-    this.contextMenu = new ContextMenu(() => this.getRect(), !showContextmenu);
+    this.contextMenu = new ContextMenu(() => this.getRect(), !showContextmenu, contentMenus);
     // selector
     this.selector = new Selector(data);
     this.overlayerCEl = h('div', `${cssPrefix}-overlayer-content`)
@@ -964,6 +975,7 @@ export default class Sheet {
     this.print.resetData(data);
     this.selector.resetData(data);
     this.table.resetData(data);
+    sheetReset.call(this);
   }
 
   loadData(data) {
@@ -1005,9 +1017,9 @@ export default class Sheet {
     const { width, height } = this.getRect();
     return {
       width: width - cols.indexWidth,
-      height: height - rows.height,
+      height: height - rows.indexHeight,
       left: cols.indexWidth,
-      top: rows.height,
+      top: rows.indexHeight,
     };
   }
 }
