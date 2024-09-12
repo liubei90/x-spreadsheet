@@ -16,7 +16,7 @@
       ></iframe> -->
     </div>
     <div id="x-spreadsheet-demo"></div>
-    <div style="margin-top: 16px;">只读模式</div>
+    <div style="margin-top: 16px">只读模式</div>
     <div id="x-spreadsheet-demo2"></div>
     <script>
       function load() {
@@ -204,6 +204,30 @@
 
         var xs = y_spreadsheet("#x-spreadsheet-demo", {
           showToolbar: true,
+          toolbars: [
+            "undo",
+            "redo",
+            // "print",
+            "paintformat",
+            "clearformat",
+            // "format",
+            // "font-name",
+            "font-size",
+            "font-bold",
+            "font-italic",
+            "underline",
+            "strike",
+            "color",
+            "bgcolor",
+            "border",
+            "merge",
+            "align",
+            "valign",
+            "textwrap",
+            // "freeze",
+            // "autofilter",
+            // "formula",
+          ],
           showGrid: true,
           showBottomBar: true,
           view: {
@@ -259,7 +283,6 @@
             // console.log(cdata);
             console.log(">>>", xs.getData());
           });
-
 
         var defaultData2 = JSON.parse(JSON.stringify(defaultData));
         defaultData2[0].rows.len = 4;

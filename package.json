@@ -1,6 +1,6 @@
 {
   "name": "y-data-spreadsheet",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "a javascript xpreadsheet",
   "types": "src/index.d.ts",
   "main": "src/index.js",
@@ -27,7 +27,8 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --open --config build/webpack.dev.js",
-    "build": "webpack --config build/webpack.prod.js",
+    "build": "npm run build-dist && npm run build-locale",
+    "build-dist": "webpack --config build/webpack.prod.js",
     "build-locale": "webpack --config build/webpack.locale.js",
     "lint": "./node_modules/eslint/bin/eslint.js src",
     "test": "nyc ./node_modules/mocha/bin/mocha --require @babel/register --recursive test"

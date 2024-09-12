@@ -5,7 +5,7 @@ const resolve = dir => path.join(__dirname, '..', dir);
 
 module.exports = {
   entry: {
-    yspreadsheet: './src/index.js',
+    yspreadsheet: './src/indexWithStyle.js',
   },
   module: {
     rules: [

@@ -77,7 +77,10 @@ const defaultSettings = {
   },
   showGrid: true,
   showToolbar: true,
+  toolbars: undefined,
   showContextmenu: true,
+  contentMenus: undefined,
+  onCustomerMenuClick: undefined,
   showBottomBar: true,
   showScrollbar: true,
   row: {
