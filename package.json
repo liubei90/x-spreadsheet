@@ -1,6 +1,6 @@
 {
   "name": "y-data-spreadsheet",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "a javascript xpreadsheet",
   "types": "src/index.d.ts",
   "main": "src/index.js",
@@ -63,5 +63,7 @@
     "webpack-dev-server": "^3.10.2",
     "webpack-merge": "^4.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "url-loader": "^4.1.1"
+  }
 }

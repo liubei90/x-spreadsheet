@@ -38,13 +38,29 @@ module.exports = {
       {
         test: /\.(png|svg|jpg|gif)$/,
         use: [
-          'file-loader',
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 99999999,
+              name: '[name].[hash].[ext]',
+              esModule: false,
+              fallback: 'file-loader',
+            },
+          }
         ],
       },
       {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
-          'file-loader',
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 99999999,
+              name: '[name].[hash].[ext]',
+              esModule: false,
+              fallback: 'file-loader',
+            },
+          }
         ],
       },
     ],
