@@ -305,10 +305,10 @@ function getCellRowByY(y, scrollOffsety) {
   // console.log('ri:', ri, ', top:', top, ', height:', height);
 
   if (top <= 0) {
-    console.log('getCellRowByY', { ri: -1, top: 0, height: rows.indexHeight });
+    // console.log('getCellRowByY', { ri: -1, top: 0, height: rows.indexHeight });
     return { ri: -1, top: 0, height: rows.indexHeight };
   }
-  console.log('getCellRowByY', { ri: ri - 1, top, height });
+  // console.log('getCellRowByY', { ri: ri - 1, top, height });
   return { ri: ri - 1, top, height };
 }
 
@@ -334,7 +334,7 @@ function getCellColByX(x, scrollOffsetx) {
 export default class DataProxy {
   constructor(name, settings) {
     this.settings = helper.merge(defaultSettings, settings || {});
-    console.log('DataProxy', name, settings, this.settings);
+    // console.log('DataProxy', name, settings, this.settings);
     // save data begin
     this.name = name || 'sheet';
     this.freeze = [0, 0];
@@ -606,7 +606,7 @@ export default class DataProxy {
           cell.text = `=${value}()`;
         }
       } else {
-        console.log('setSelectedCellAttr', property, value, JSON.stringify(selector.range), styles, rows);
+        // console.log('setSelectedCellAttr', property, value, JSON.stringify(selector.range), styles, rows);
         selector.range.each((ri, ci) => {
           const cell = rows.getCellOrNew(ri, ci);
           let cstyle = {};
@@ -732,15 +732,15 @@ export default class DataProxy {
     if (fsh > 0 && fsh > top) {
       top0 = top;
     }
-    console.log('getRect', {
-      l: left,
-      t: top,
-      left: left0,
-      top: top0,
-      height,
-      width,
-      scroll,
-    });
+    // console.log('getRect', {
+    //   l: left,
+    //   t: top,
+    //   left: left0,
+    //   top: top0,
+    //   height,
+    //   width,
+    //   scroll,
+    // });
 
     return {
       l: left,
@@ -1099,7 +1099,7 @@ export default class DataProxy {
   viewHeight() {
     if (this.settings.view.fit === 'content') {
       const rowsH = this.rows.totalHeight();
-      console.log('viewHeight', rowsH);
+      // console.log('viewHeight', rowsH);
       return rowsH;
     }
     const { view, showToolbar, showBottomBar } = this.settings;
@@ -1116,7 +1116,7 @@ export default class DataProxy {
   viewWidth() {
     if (this.settings.view.fit === 'content') {
       const colsW = this.cols.totalWidth();
-      console.log('viewWidth', colsW);
+      // console.log('viewWidth', colsW);
       return colsW;
     }
     return this.settings.view.width();

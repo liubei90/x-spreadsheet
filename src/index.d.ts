@@ -177,12 +177,23 @@ export interface CellStyle {
 export interface Editor {}
 export interface Element {}
 
+export interface DataProxy {
+  getSelectedCell(): Cell | null;
+  getSelectedCellIndex(): { ri: number; ci: number } | null;
+}
+
 export interface Row {}
 export interface Table {}
 export interface Cell {}
-export interface Sheet {}
+export interface Sheet {
+  data: DataProxy;
+
+  isHideSelector(): boolean;
+}
 
 export default class Spreadsheet {
+  sheet: Sheet;
+  data: DataProxy;
   constructor(container: string | HTMLElement, opts?: Options);
   on: SpreadsheetEventHandler;
   /**
@@ -221,16 +232,28 @@ export default class Spreadsheet {
    * load data
    * @param json
    */
-  loadData(json: Record<string, any>): this;
+  loadData(json: Record<string, any> | Record<string, any>[]): this;
   /**
    * get data
    */
-  getData(): Record<string, any>;
+  getData(): Record<string, any>[];
   /**
    * bind handler to change event, including data change and user actions
    * @param callback
    */
   change(callback: (json: Record<string, any>) => void): this;
+  /** 移除指定 sheet */
+  removeSheet(index: number): this;
+  /** 新增 sheet */
+  addSheet(name: string, active = true): this;
+  /** 激活 sheet */
+  activeSheet: (index: number) => this;
+  /** 获取当前 sheet 索引 */
+  getActiveSheetIndex: () => number;
+  /** 设置 sheet 的名称 */
+  updateSheetName: (i: number, name: string) => this;
+  /** 重绘 */
+  reRender(): this;
   /**
    * set locale
    * @param lang

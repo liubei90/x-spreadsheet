@@ -241,6 +241,10 @@ export default class Selector {
     this.el.hide();
   }
 
+  isHide() {
+    return this.el.isHide();
+  }
+
   resetOffset() {
     const {
       data, tl, t, l, br,

@@ -157,7 +157,7 @@ function overlayerMousemove(evt) {
     rowResizer.hide();
   }
   if (cRect.ri === -1 && cRect.ci >= 0) {
-    console.log('overlayerMousemove cRect', cRect);
+    // console.log('overlayerMousemove cRect', cRect);
 
     cRect.height = rows.indexHeight;
     colResizer.show(cRect, {
@@ -298,7 +298,7 @@ function sheetReset() {
   } = this;
   const tOffset = this.getTableOffset();
   const vRect = this.getRect();
-  console.log('sheetReset', tOffset, vRect);
+  // console.log('sheetReset', tOffset, vRect);
   tableEl.attr(vRect);
   overlayerEl.offset(vRect);
   overlayerCEl.offset(tOffset);
@@ -951,7 +951,7 @@ export default class Sheet {
     sheetInitEvents.call(this);
     sheetReset.call(this);
     // init selector [0, 0]
-    selectorSet.call(this, false, 0, 0);
+    // selectorSet.call(this, false, 0, 0);
   }
 
   on(eventName, func) {
@@ -1021,5 +1021,9 @@ export default class Sheet {
       left: cols.indexWidth,
       top: rows.indexHeight,
     };
+  }
+
+  isHideSelector() {
+    return this.selector.isHide();
   }
 }

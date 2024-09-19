@@ -46,7 +46,7 @@ function buildMenuItem(item, customerKey) {
     })
     .children(item.title(), h('div', 'label').child(item.label || ''));
 
-  console.log('el', el);
+  // console.log('el', el);
 
   if (item.key) {
     el.data.key = item.key;
