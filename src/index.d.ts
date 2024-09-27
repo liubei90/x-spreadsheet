@@ -48,24 +48,43 @@ export interface Options {
     width: () => number;
   };
   row?: {
-    len: number;
-    height: number;
+    len?: number;
+    height?: number;
     /** 列号行的高度，为 0 时不展示文本 */
-    indexHeight: number;
+    indexHeight?: number;
   };
   /** 是否展示列号文本 */
   showRowIndexText?: boolean;
   col?: {
-    len: number;
-    width: number;
+    len?: number;
+    width?: number;
     /** 行号列的宽度，为 0 时不展示文本 */
-    indexWidth: number;
-    minWidth: number;
+    indexWidth?: number;
+    minWidth?: number;
   };
   /** 是否展示行号文本 */
   showColIndexText?: boolean;
   /** 右键菜单展示内容，可以传入自定义菜单 */
-  contentMenus?: ("" | "2")[];
+  contentMenus?: (
+    | "copy"
+    | "cut"
+    | "paste"
+    | "paste-value"
+    | "paste-format"
+    | "divider"
+    | "insert-row"
+    | "insert-column"
+    | "delete-row"
+    | "delete-column"
+    | "delete-cell-text"
+    | "hide"
+    | "validation"
+    | "cell-printable"
+    | "cell-non-printable"
+    | "cell-editable"
+    | "cell-non-editable"
+    | string
+  )[];
   /** 自定义菜单点击事件，type 为传入的自定义菜单 */
   onCustomerMenuClick?: (
     type: string,
@@ -180,6 +199,8 @@ export interface Element {}
 export interface DataProxy {
   getSelectedCell(): Cell | null;
   getSelectedCellIndex(): { ri: number; ci: number } | null;
+  setSelectedCellAttr(property: string, value: any): void;
+  setCellText(ri: number, ci: number, text: string | undefined, state: 'input' | 'finished'): void;
 }
 
 export interface Row {}

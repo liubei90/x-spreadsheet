@@ -25,6 +25,7 @@ class Spreadsheet {
           (index) => {
             const d = this.datas[index];
             this.sheet.resetData(d);
+            this.sheet.clearClipboard();
           },
           () => {
             this.deleteSheet();
@@ -100,6 +101,7 @@ class Spreadsheet {
 
     if (d) {
       this.sheet.resetData(d);
+      this.sheet.clearClipboard();
     }
   }
 

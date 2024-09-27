@@ -186,6 +186,7 @@ function renderSelectedHeaderCell(x, y, w, h) {
 // ty: moving distance on y-axis
 function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
   const { draw, data } = this;
+  const { settings } = data;
   const sumHeight = viewRange.h; // rows.sumHeight(viewRange.sri, viewRange.eri + 1);
   const sumWidth = viewRange.w; // cols.sumWidth(viewRange.sci, viewRange.eci + 1);
   const nty = ty + h;
@@ -223,8 +224,11 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
         draw.restore();
       }
     });
-    draw.line([0, sumHeight + nty], [w, sumHeight + nty]);
-    draw.line([w, nty], [w, sumHeight + nty]);
+
+    if (settings.showGrid) {
+      draw.line([0, sumHeight + nty], [w, sumHeight + nty]);
+      draw.line([w, nty], [w, sumHeight + nty]);
+    }
   }
   // x-header-text
   if (type === 'all' || type === 'top') {
@@ -245,8 +249,11 @@ function renderFixedHeaders(type, viewRange, w, h, tx, ty) {
         draw.restore();
       }
     });
-    draw.line([sumWidth + ntx, 0], [sumWidth + ntx, h]);
-    draw.line([0, h], [sumWidth + ntx, h]);
+
+    if (settings.showGrid) {
+      draw.line([sumWidth + ntx, 0], [sumWidth + ntx, h]);
+      draw.line([0, h], [sumWidth + ntx, h]);
+    }
   }
   draw.restore();
 }

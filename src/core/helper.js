@@ -133,6 +133,24 @@ export function numberCalc(type, a1, a2) {
   return ret.toFixed(Math.max(al1, al2));
 }
 
+function eachRow(data, cb) {
+  if (!data || !data.rows) return;
+
+  Object.keys(data.rows)
+    .filter((k) => /\d+/.test(k))
+    .map((k) => [k, data.rows[k]])
+    .forEach((item) => { cb(item[1], item[0]) });
+}
+
+function eachCell(row, cb) {
+  if (!row || !row.cells) return;
+
+  Object.keys(row.cells)
+    .filter((k) => /\d+/.test(k))
+    .map((k) => [k, row.cells[k]])
+    .forEach((item) => { cb(item[1], item[0]) });
+}
+
 export default {
   cloneDeep,
   merge: (...sources) => mergeDeep({}, ...sources),
@@ -144,4 +162,6 @@ export default {
   rangeReduceIf,
   deleteProperty,
   numberCalc,
+  eachRow,
+  eachCell,
 };
