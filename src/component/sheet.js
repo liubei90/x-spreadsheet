@@ -978,6 +978,10 @@ export default class Sheet {
     sheetReset.call(this);
   }
 
+  clearClipboard() {
+    clearClipboard.call(this);
+  }
+
   loadData(data) {
     this.data.setData(data);
     sheetReset.call(this);
