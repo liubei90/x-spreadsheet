@@ -543,14 +543,15 @@ export default class DataProxy {
     return true;
   }
 
-  pasteFromSystemClipboard(resetSheet, eventTrigger) {
+  pasteFromSystemClipboard(evt, resetSheet, eventTrigger) {
     const { selector } = this;
-    navigator.clipboard.readText().then((content) => {
+
+    const doPaste = (content) => {
       if (content.slice(0, 12) === "spreadsheet:") {
         try {
           this.changeData(() => {
             const copyData = JSON.parse(content.slice(12));
-            console.log('copyData', copyData);
+            console.log("copyData", copyData);
 
             const rn = copyData.range.eri - copyData.range.sri + 1;
             const cn = copyData.range.eci - copyData.range.sci + 1;
@@ -581,7 +582,9 @@ export default class DataProxy {
                     if (cell.merge) {
                       const [rn2, cn2] = cell.merge;
                       if (rn2 > 0 || cn2 > 0) {
-                        merges.add(new CellRange(nri, nci, nri + rn2, nci + cn2));
+                        merges.add(
+                          new CellRange(nri, nci, nri + rn2, nci + cn2)
+                        );
                       }
                     }
                   }
@@ -610,7 +613,16 @@ export default class DataProxy {
         resetSheet();
         eventTrigger(this.rows.getData());
       }
-    });
+    };
+
+    if (evt && evt.clipboardData) {
+      doPaste(evt.clipboardData.getData("text/plain"));
+      evt.preventDefault();
+    } else if (navigator.clipboard) {
+      navigator.clipboard.readText().then((content) => {
+        doPaste(content);
+      });
+    }
   }
 
   parseClipboardContent(clipboardContent) {
