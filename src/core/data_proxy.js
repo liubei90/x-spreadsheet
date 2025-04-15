@@ -312,7 +312,7 @@ function getCellRowByY(y, scrollOffsety) {
   top -= height;
   // console.log('ri:', ri, ', top:', top, ', height:', height);
 
-  if (top <= 0) {
+  if (top < 0) {
     // console.log('getCellRowByY', { ri: -1, top: 0, height: rows.indexHeight });
     return { ri: -1, top: 0, height: rows.indexHeight };
   }
@@ -333,7 +333,7 @@ function getCellColByX(x, scrollOffsetx) {
     x,
     (i) => cols.getWidth(i)
   );
-  if (left <= 0) {
+  if (left < 0) {
     return { ci: -1, left: 0, width: cols.indexWidth };
   }
   return { ci: ci - 1, left, width };

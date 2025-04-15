@@ -392,6 +392,8 @@ function overlayerMousedown(evt) {
   let { ri, ci } = cellRect;
   // sort or filter
   const { autoFilter } = data;
+  // console.log('autoFilter', autoFilter, isAutofillEl, ri, ci);
+
   if (autoFilter.includes(ri, ci)) {
     if (left + width - 20 < offsetX && top + height - 20 < offsetY) {
       const items = autoFilter.items(ci, (r, c) => data.rows.getCell(r, c));

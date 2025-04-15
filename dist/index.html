@@ -306,6 +306,10 @@
           },
           showColIndexText: false,
         }).loadData(defaultData2);
+
+        xs2.on('cell-dblclick', function(cell) {
+          console.log('cell-dblclick', cell);
+        })
       }
     </script>
     <!--script type="text/javascript" src="https://unpkg.com/x-data-spreadsheet@1.0.20/dist/locale/zh-cn.js"></script-->
