@@ -438,6 +438,37 @@ function overlayerMousedown(evt) {
     }
   }
 }
+function overlayerDblclick(evt) {
+  // console.log('overlayerDblclick', evt);
+  // console.log(':::::overlayer.mousedown:', evt.detail, evt.button, evt.buttons, evt.shiftKey);
+  // console.log('evt.target.className:', evt.target.className);
+  const {
+    data, sortFilter,
+  } = this;
+  const { offsetX, offsetY } = evt;
+  const cellRect = data.getCellRectByXY(offsetX, offsetY);
+  const {
+    left, top, width, height,
+  } = cellRect;
+  const { ri, ci } = cellRect;
+  // sort or filter
+  const { autoFilter } = data;
+  if (autoFilter.includes(ri, ci)) {
+    if (left + width - 20 < offsetX && top + height - 20 < offsetY) {
+      const items = autoFilter.items(ci, (r, c) => data.rows.getCell(r, c));
+      sortFilter.hide();
+      sortFilter.set(ci, items, autoFilter.getFilter(ci), autoFilter.getSort(ci));
+      sortFilter.setOffset({ left, top: top + height + 2 });
+      return;
+    }
+  }
+  if (ri === -1 && ci === -1) return;
+
+  const cell = data.getCell(ri, ci);
+  // console.log('ri:', ri, ', ci:', ci, cell);
+  this.trigger('cell-dblclick', cell, ri, ci);
+  // selectorSet.call(this, true, ri, ci);
+}
 
 function editorSetOffset() {
   const { editor, data } = this;
@@ -643,6 +674,9 @@ function sheetInitEvents() {
       const { offsetX, offsetY } = evt;
       if (offsetY <= 0) colResizer.hide();
       if (offsetX <= 0) rowResizer.hide();
+    })
+    .on('dblclick', (evt) => {
+      overlayerDblclick.call(this, evt);
     });
 
   selector.inputChange = (v) => {

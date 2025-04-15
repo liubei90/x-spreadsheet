@@ -108,6 +108,7 @@ export interface Options {
   };
 }
 
+export type CELL_DBLCLICK = "cell-dblclick";
 export type CELL_SELECTED = "cell-selected";
 export type CELLS_SELECTED = "cells-selected";
 export type CELL_EDITED = "cell-edited";
@@ -115,6 +116,10 @@ export type CELL_EDITED = "cell-edited";
 export type CellMerge = [number, number];
 
 export interface SpreadsheetEventHandler {
+  (
+    envt: CELL_DBLCLICK,
+    callback: (cell: Cell, rowIndex: number, colIndex: number) => void
+  ): void;
   (
     envt: CELL_SELECTED,
     callback: (cell: Cell, rowIndex: number, colIndex: number) => void
