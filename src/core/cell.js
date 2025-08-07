@@ -119,11 +119,19 @@ const infixExprToSuffixExpr = (src) => {
   return stack;
 };
 
+const getUnit = (v) => {
+  if (!v) {
+    return v;
+  }
+  return String(v).replace(/\d/g, '');
+};
 const evalSubExpr = (subExpr, cellRender) => {
+  // console.log('evalSubExpr', subExpr);
   const [fl] = subExpr;
   let expr = subExpr;
   if (fl === '"') {
-    return subExpr.substring(1);
+    const v = subExpr.substring(1);
+    return [parseFloat(v), getUnit(v)];
   }
   let ret = 1;
   if (fl === '-') {
@@ -131,10 +139,15 @@ const evalSubExpr = (subExpr, cellRender) => {
     ret = -1;
   }
   if (expr[0] >= '0' && expr[0] <= '9') {
-    return ret * Number(expr);
+    return [ret * Number(expr), ''];
   }
   const [x, y] = expr2xy(expr);
-  return ret * cellRender(x, y);
+  // console.log('cellRender(x, y)', cellRender(x, y), expr, x, y, ret);
+  const cellText = cellRender(x, y);
+  const unit = getUnit(cellText);
+  const numberValue = parseFloat(cellText) || 0;
+  // return ret * cellRender(x, y);
+  return [ret * numberValue, unit];
 };
 
 // evaluate the suffix expression
@@ -142,6 +155,7 @@ const evalSubExpr = (subExpr, cellRender) => {
 // formulaMap: {'SUM': {}, ...}
 // cellRender: (x, y) => {}
 const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
+  // console.log('evalSuffixExpr', srcStack);
   const stack = [];
   // console.log(':::::formulaMap:', formulaMap);
   for (let i = 0; i < srcStack.length; i += 1) {
@@ -196,7 +210,11 @@ const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
       if ((fc >= 'a' && fc <= 'z') || (fc >= 'A' && fc <= 'Z')) {
         cellList.push(expr);
       }
-      stack.push(evalSubExpr(expr, cellRender));
+      // const [curStack, unit] = evalSubExpr(expr, cellRender);
+      const evalRes = evalSubExpr(expr, cellRender);
+      // console.log('curStack', evalRes);
+      stack.push(evalRes[0]);
+      // stack.push(evalSubExpr(expr, cellRender));
       cellList.pop();
     }
     // console.log('stack:', stack);
@@ -204,16 +222,26 @@ const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
   return stack[0];
 };
 
-const cellRender = (src, formulaMap, getCellText, cellList = []) => {
+const cellRender = (src, formulaMap, getCellText, cellList = [], unit = '') => {
+  // console.log('cellRender', src);
   if (src[0] === '=') {
     const stack = infixExprToSuffixExpr(src.substring(1));
     if (stack.length <= 0) return src;
+    // console.log('stack', JSON.stringify(stack));
+    try {
+      if (!unit) {
+        const evalRes = evalSubExpr(stack[0], getCellText);
+        unit = evalRes[1]
+      }
+    } catch (error) {
+      console.error(error);
+    }
     return evalSuffixExpr(
       stack,
       formulaMap,
-      (x, y) => cellRender(getCellText(x, y), formulaMap, getCellText, cellList),
+      (x, y) => cellRender(getCellText(x, y), formulaMap, getCellText, cellList, unit),
       cellList,
-    );
+    ) + unit;
   }
   return src;
 };
