@@ -142,10 +142,11 @@ const evalSubExpr = (subExpr, cellRender) => {
     return [ret * Number(expr), ''];
   }
   const [x, y] = expr2xy(expr);
-  // console.log('cellRender(x, y)', cellRender(x, y), expr, x, y, ret);
+  // console.log('x, y', x, y, cellRender(x, y), expr);
   const cellText = cellRender(x, y);
   const unit = getUnit(cellText);
   const numberValue = parseFloat(cellText) || 0;
+  // console.log('cellText', cellText, 'numberValue', numberValue, 'unit', unit);
   // return ret * cellRender(x, y);
   return [ret * numberValue, unit];
 };
@@ -219,6 +220,7 @@ const evalSuffixExpr = (srcStack, formulaMap, cellRender, cellList) => {
     }
     // console.log('stack:', stack);
   }
+  // console.log('evalSuffixExpr res', stack);
   return stack[0];
 };
 
@@ -230,12 +232,14 @@ const cellRender = (src, formulaMap, getCellText, cellList = [], unit = '') => {
     // console.log('stack', JSON.stringify(stack));
     try {
       if (!unit) {
-        const evalRes = evalSubExpr(stack[0], getCellText);
-        unit = evalRes[1]
+        // const evalRes = evalSubExpr(stack[0], getCellText);
+        // console.log('evalRes', evalRes);
+        // unit = evalRes[1]
       }
     } catch (error) {
       console.error(error);
     }
+    // console.log('unit', unit, src);
     return evalSuffixExpr(
       stack,
       formulaMap,
